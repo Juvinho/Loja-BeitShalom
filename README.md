@@ -2,6 +2,18 @@
 
 Aplicação web de e‑commerce desenvolvida para apresentar e vender produtos da Sinagoga Beit Shalom, com foco em uma experiência moderna, responsiva e preparada para integração com meios de pagamento e cálculo de frete.
 
+> Pensado para demonstração profissional ao cliente, com fluxo completo de navegação, carrinho e checkout.
+
+---
+
+## Destaques Rápidos
+
+- Interface escura elegante, alinhada à identidade visual da Beit Shalom.
+- Loja totalmente responsiva (desktop e mobile).
+- Checkout integrado ao **Mercado Pago** com servidor Node dedicado.
+- Produto de teste de **R$ 1,00** configurado como **infoproduto digital** (sem frete).
+- Estrutura preparada para **cálculo de frete real** via Melhor Envio.
+
 ---
 
 ## Visão Geral
@@ -119,6 +131,22 @@ VITE_EMAIL_CONTATO=seu-email@dominio.com
    ```
 
    O servidor sobe por padrão em `http://localhost:3001` e é chamado pelo frontend para criar a preferência de pagamento.
+
+---
+
+## Como Demonstrar ao Cliente
+
+### Passo a passo sugerido para a apresentação
+
+1. Acesse a **Home** e explique brevemente a proposta da Beit Shalom.
+2. Clique em **Visitar a Loja** e mostre a vitrine de produtos.
+3. Destaque o **Produto de Teste – 1 Real**:
+   - Explique que é um **infoproduto digital, enviado por e‑mail**, sem frete.
+4. Adicione o produto ao carrinho:
+   - Mostre o **carrinho lateral** se abrindo com o resumo da compra.
+5. Avance para o **checkout do Mercado Pago**:
+   - Mostre que o valor final é de R$ 1,00 (sem frete).
+   - Se utilizar ambiente real, destaque que o cliente está vendo o mesmo fluxo que um comprador usaria.
 
 ---
 
