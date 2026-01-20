@@ -16,6 +16,7 @@ export interface Product {
   };
   rating?: number;
   ratingCount?: number;
+  isDigital?: boolean;
 }
 
 export interface CartItem extends Product {

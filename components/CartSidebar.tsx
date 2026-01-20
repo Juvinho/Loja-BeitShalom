@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Trash2, ChevronRight, Bookmark, Truck, Percent } from 'lucide-react';
+import { X, Trash2, ChevronRight, Bookmark, Truck, Percent, User } from 'lucide-react';
 import { CartItem } from '../types';
 import { calculateShipping, ShippingQuote } from '../services/melhorEnvioService';
 import { createCheckoutPreference } from '../services/mercadoPagoCheckout';
@@ -30,6 +30,7 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({
   const [shippingOptions, setShippingOptions] = useState<ShippingQuote[]>([]);
   const [selectedShipping, setSelectedShipping] = useState<ShippingQuote | null>(null);
   const [isLoadingShipping, setIsLoadingShipping] = useState(false);
+  const [addressInfo, setAddressInfo] = useState<{ logradouro: string; bairro: string; localidade: string; uf: string } | null>(null);
   const [coupon, setCoupon] = useState('');
   const [discountPercent, setDiscountPercent] = useState(0);
 
@@ -37,6 +38,8 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({
   const discountValue = (total * discountPercent) / 100;
   const shippingValue = selectedShipping?.price ?? 0;
   const finalTotal = total - discountValue + shippingValue;
+
+  const hasPhysicalItems = cart.some(item => !item.isDigital);
 
   const handleCalcShipping = async () => {
     if (!cep || cep.length < 8) return;
@@ -57,8 +60,16 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({
       if (viaCepData.erro) {
         setCep('');
         setCepError('CEP não encontrado. Verifique e tente novamente.');
+        setAddressInfo(null);
         return;
       }
+
+      setAddressInfo({
+        logradouro: viaCepData.logradouro,
+        bairro: viaCepData.bairro,
+        localidade: viaCepData.localidade,
+        uf: viaCepData.uf
+      });
 
       const options = await calculateShipping(cep, cart);
       setShippingOptions(options);
@@ -86,6 +97,7 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({
       setCepError('');
       setShippingOptions([]);
       setSelectedShipping(null);
+      setAddressInfo(null);
       return;
     }
 
@@ -98,6 +110,7 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({
     setCep('');
     setShippingOptions([]);
     setSelectedShipping(null);
+    setAddressInfo(null);
     setCepError('Por favor, insira um CEP válido com 8 dígitos.');
   };
 
@@ -119,6 +132,18 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({
       if (cart.length === 0) {
         return;
       }
+
+      if (hasPhysicalItems) {
+        if (!selectedShipping) {
+          setCepError('Por favor, calcule e selecione o frete antes de finalizar.');
+          const cepInput = document.querySelector('input[placeholder="Digite seu CEP"]');
+          if (cepInput) {
+            (cepInput as HTMLElement).focus();
+          }
+          return;
+        }
+      }
+
       const { init_point } = await createCheckoutPreference(cart, shippingValue);
       window.location.href = init_point;
     } catch (error) {
@@ -238,49 +263,75 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({
             </div>
 
             <div className="mb-4 space-y-3">
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <Truck className="w-4 h-4 text-gray-400" />
-                  <span className="text-sm text-white">Calcular frete</span>
-                </div>
-                <div className="flex gap-2">
-                  <input
-                    value={cep}
-                    onChange={(e) => handleCepChange(e.target.value)}
-                    onBlur={handleCepBlur}
-                    placeholder="Digite seu CEP"
-                    className="flex-1 bg-brand-card border border-white/15 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent"
-                  />
-                </div>
-                {isLoadingShipping && !cepError && (
-                  <p className="text-xs text-brand-accent mt-1">
-                    Calculando frete, aguarde...
-                  </p>
-                )}
-                {cepError && (
-                  <p className="text-xs text-red-400 mt-1">
-                    {cepError}
-                  </p>
-                )}
-                {shippingOptions.length > 0 && (
-                  <div className="bg-brand-dark/50 p-3 rounded-lg space-y-2 mt-2">
-                    <p className="text-sm text-gray-400">Opções de Frete:</p>
-                    {shippingOptions.map((opt, idx) => (
-                      <div 
-                        key={idx}
-                        onClick={() => setSelectedShipping(opt)}
-                        className={`p-2 rounded border cursor-pointer flex justify-between items-center transition-colors ${selectedShipping === opt ? 'border-brand-accent bg-brand-accent/10' : 'border-white/10 hover:bg-white/5'}`}
-                      >
-                        <div>
-                            <p className="text-white text-sm font-medium">{opt.serviceName}</p>
-                            <p className="text-xs text-gray-400">{opt.days} dias úteis</p>
-                        </div>
-                        <p className="text-white font-bold">R$ {opt.price.toFixed(2).replace('.', ',')}</p>
-                      </div>
-                    ))}
+              {hasPhysicalItems ? (
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <Truck className="w-4 h-4 text-gray-400" />
+                    <span className="text-sm text-white">Calcular frete</span>
                   </div>
-                )}
-              </div>
+                  <div className="flex gap-2">
+                    <input
+                      value={cep}
+                      onChange={(e) => handleCepChange(e.target.value)}
+                      onBlur={handleCepBlur}
+                      placeholder="Digite seu CEP"
+                      className="flex-1 bg-brand-card border border-white/15 rounded-lg px-3 py-2 text-sm text-white outline-none focus:border-brand-accent focus:ring-1 focus:ring-brand-accent"
+                    />
+                  </div>
+                  {isLoadingShipping && !cepError && (
+                    <p className="text-xs text-brand-accent mt-1">
+                      Calculando frete, aguarde...
+                    </p>
+                  )}
+                  {cepError && (
+                    <p className="text-xs text-red-400 mt-1">
+                      {cepError}
+                    </p>
+                  )}
+                  {addressInfo && (
+                    <div className="bg-brand-dark/30 p-3 rounded-lg border border-white/5 mt-2">
+                      <p className="text-xs text-gray-400 mb-1">Entregar em:</p>
+                      <p className="text-sm text-white font-medium leading-snug">
+                        {addressInfo.logradouro}, {addressInfo.bairro}
+                      </p>
+                      <p className="text-sm text-white font-medium">
+                        {addressInfo.localidade} - {addressInfo.uf}
+                      </p>
+                      <p className="text-[10px] text-brand-accent mt-2 italic border-t border-white/5 pt-2">
+                        * O número da casa e complemento serão solicitados na etapa de pagamento seguro.
+                      </p>
+                    </div>
+                  )}
+                  {shippingOptions.length > 0 && (
+                    <div className="bg-brand-dark/50 p-3 rounded-lg space-y-2 mt-2">
+                      <p className="text-sm text-gray-400">Opções de Frete:</p>
+                      {shippingOptions.map((opt, idx) => (
+                        <div 
+                          key={idx}
+                          onClick={() => setSelectedShipping(opt)}
+                          className={`p-2 rounded border cursor-pointer flex justify-between items-center transition-colors ${selectedShipping === opt ? 'border-brand-accent bg-brand-accent/10' : 'border-white/10 hover:bg-white/5'}`}
+                        >
+                          <div>
+                              <p className="text-white text-sm font-medium">{opt.serviceName}</p>
+                              <p className="text-xs text-gray-400">{opt.days} dias úteis</p>
+                          </div>
+                          <p className="text-white font-bold">R$ {opt.price.toFixed(2).replace('.', ',')}</p>
+                        </div>
+                      ))}
+                      <p className="text-[10px] text-gray-500 text-center mt-2 border-t border-white/5 pt-2">
+                        O código de rastreio será enviado para seu e-mail/WhatsApp após a postagem.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="bg-brand-dark/30 p-3 rounded-lg border border-white/5">
+                  <p className="text-sm text-brand-accent flex items-center gap-2">
+                    <Truck className="w-4 h-4" />
+                    Produto Digital - Envio Imediato por E-mail
+                  </p>
+                </div>
+              )}
 
               <div>
                 <div className="flex items-center gap-2 mb-1">
@@ -332,6 +383,9 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({
                   R$ {finalTotal.toFixed(2).replace('.', ',')}
                 </span>
               </div>
+              <p className="text-[10px] text-gray-500 text-right mt-1 italic">
+                *Parcelamento sujeito a taxas do cartão
+              </p>
             </div>
 
             <button

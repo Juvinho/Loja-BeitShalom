@@ -26,18 +26,18 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateHome, onNavigateStore 
             <div className="text-sm text-gray-400 space-y-2 pt-2">
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 mt-1 text-brand-accent" />
-                <span>Rua Exemplo, 123 - Bairro<br/>São Paulo - SP, 01234-567</span>
+                <span>Av. Oswaldo Ferro, 5420, Res. São Jerônimo<br/>Franca - SP, 14412-382</span>
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-brand-accent" />
-                <span>(11) 99999-9999</span>
+                <span>(16) 99454-7023</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-brand-accent" />
-                <span>contato@sinagogabeitshalom.org.br</span>
+                <span>contato@sinagogabeitshalom.com</span>
               </div>
               <div className="text-xs text-gray-500 mt-2">
-                CNPJ: 00.000.000/0001-00
+                CNPJ: 17.214.357/0001-75
               </div>
             </div>
           </div>
@@ -65,13 +65,13 @@ export const Footer: React.FC<FooterProps> = ({ onNavigateHome, onNavigateStore 
             <div className="mb-6">
               <h5 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Redes Sociais</h5>
               <div className="flex gap-4">
-                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-brand-accent hover:text-brand-dark transition-all duration-300">
+                <a href="https://www.instagram.com/sinagogabeitshalom" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-brand-accent hover:text-brand-dark transition-all duration-300">
                   <Instagram className="w-5 h-5" />
                 </a>
-                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-brand-accent hover:text-brand-dark transition-all duration-300">
+                <a href="https://www.youtube.com/@BeitShalom-0" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-brand-accent hover:text-brand-dark transition-all duration-300">
                   <Youtube className="w-5 h-5" />
                 </a>
-                <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-brand-accent hover:text-brand-dark transition-all duration-300">
+                <a href="https://www.facebook.com/p/Sinagoga-Beit-Shalom-100091560291158/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:bg-brand-accent hover:text-brand-dark transition-all duration-300">
                   <Facebook className="w-5 h-5" />
                 </a>
               </div>

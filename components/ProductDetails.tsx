@@ -18,7 +18,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ product, onAddTo
 
   const relatedProducts = MOCK_PRODUCTS.filter(
     p => p.id !== product.id && p.category === product.category
-  ).slice(0, 4);
+  ).slice(0, 8);
 
   const ratingValue = product.rating ?? 4.8;
   const ratingCount = product.ratingCount ?? 25;
@@ -68,6 +68,14 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ product, onAddTo
                   ))}
                 </div>
               )}
+
+              {/* Descrição Detalhada na coluna da esquerda */}
+              <div className="p-6 border-t border-white/5">
+                <h3 className="text-lg font-semibold text-white mb-3">Sobre o Produto</h3>
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  {product.detailedDescription ?? product.description}
+                </p>
+              </div>
             </div>
 
             <div className="p-8 lg:p-12 flex flex-col justify-center">
@@ -99,8 +107,8 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ product, onAddTo
                   Vendido e entregue por Beit Shalom
                 </p>
 
-                <p className="text-gray-300 text-base md:text-lg leading-relaxed mb-6 border-l-2 border-brand-accent/30 pl-4">
-                  {product.detailedDescription ?? product.description}
+                <p className="text-gray-300 text-base leading-relaxed mb-6">
+                  {product.description}
                 </p>
 
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 p-6 bg-white/5 rounded-xl border border-white/5 mb-8">
@@ -110,7 +118,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ product, onAddTo
                       R$ {product.price.toFixed(2).replace('.', ',')}
                     </div>
                     <p className="text-xs text-gray-400 mt-1">
-                      Em até 12x sem juros nas principais bandeiras
+                      Parcelamento disponível no cartão (sujeito a taxas)
                     </p>
                   </div>
                   
@@ -138,6 +146,20 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ product, onAddTo
                           <span className="text-white font-medium ml-4">{spec.value}</span>
                         </div>
                       ))}
+                      {product.dimensions && !product.specifications?.some(s => s.label === 'Peso Aproximado') && (
+                        <>
+                           <div className="flex items-center justify-between bg-brand-dark/50 border border-white/5 rounded-lg px-3 py-2 text-sm">
+                             <span className="text-gray-400">Peso Aproximado</span>
+                             <span className="text-white font-medium ml-4">{product.dimensions.weight} kg</span>
+                           </div>
+                           <div className="flex items-center justify-between bg-brand-dark/50 border border-white/5 rounded-lg px-3 py-2 text-sm">
+                             <span className="text-gray-400">Dimensões (AxLxC)</span>
+                             <span className="text-white font-medium ml-4">
+                               {product.dimensions.height}x{product.dimensions.width}x{product.dimensions.length} cm
+                             </span>
+                           </div>
+                        </>
+                      )}
                     </div>
                   </div>
                 )}

@@ -13,6 +13,7 @@ import { Product, CartItem } from './types';
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<'home' | 'store' | 'product-details'>('home');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>('Todos');
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [savedItems, setSavedItems] = useState<CartItem[]>([]);
@@ -161,24 +162,27 @@ const App: React.FC = () => {
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      <button className="px-3 py-1.5 rounded-full text-xs font-medium bg-brand-accent text-brand-dark">
-                        Todos
-                      </button>
-                      <button className="px-3 py-1.5 rounded-full text-xs font-medium bg-white/5 text-gray-300 border border-white/10">
-                        Livros
-                      </button>
-                      <button className="px-3 py-1.5 rounded-full text-xs font-medium bg-white/5 text-gray-300 border border-white/10">
-                        Itens rituais
-                      </button>
-                      <button className="px-3 py-1.5 rounded-full text-xs font-medium bg-white/5 text-gray-300 border border-white/10">
-                        Cursos digitais
-                      </button>
+                      {['Todos', 'Livros', 'Itens rituais', 'Cursos digitais'].map((category) => (
+                        <button 
+                          key={category}
+                          onClick={() => setSelectedCategory(category)}
+                          className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                            selectedCategory === category 
+                              ? 'bg-brand-accent text-brand-dark' 
+                              : 'bg-white/5 text-gray-300 border border-white/10 hover:border-brand-accent/50'
+                          }`}
+                        >
+                          {category}
+                        </button>
+                      ))}
                     </div>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-                  {MOCK_PRODUCTS.map(product => (
+                  {MOCK_PRODUCTS
+                    .filter(product => selectedCategory === 'Todos' || product.category.toLowerCase() === selectedCategory.toLowerCase())
+                    .map(product => (
                     <ProductCard 
                       key={product.id} 
                       product={product} 
