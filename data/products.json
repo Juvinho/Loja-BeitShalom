@@ -32,7 +32,8 @@
       "weight": 0.2
     },
     "rating": 5,
-    "ratingCount": 1
+    "ratingCount": 1,
+    "isDigital": true
   },
   {
     "id": 1,
@@ -107,7 +108,8 @@
       "weight": 0.1
     },
     "rating": 4.8,
-    "ratingCount": 89
+    "ratingCount": 89,
+    "isDigital": true
   },
   {
     "id": 3,
@@ -268,7 +270,8 @@
       }
     ],
     "rating": 4.7,
-    "ratingCount": 61
+    "ratingCount": 61,
+    "isDigital": true
   },
   {
     "id": 10,
@@ -365,7 +368,8 @@
       "weight": 0.1
     },
     "rating": 4.9,
-    "ratingCount": 210
+    "ratingCount": 210,
+    "isDigital": true
   },
   {
     "id": 15,
@@ -428,5 +432,36 @@
     "rating": 5,
     "ratingCount": 0,
     "isDigital": false
+  },
+  {
+    "id": 12,
+    "name": "Kipá Branco",
+    "category": "Itens Rituais",
+    "price": 129.9,
+    "image": "https://picsum.photos/800/800?random=12",
+    "images": [
+      "https://picsum.photos/800/800?random=12"
+    ],
+    "description": "",
+    "detailedDescription": "",
+    "specifications": [
+      {
+        "label": "Peso Aproximado",
+        "value": "0.3 kg"
+      },
+      {
+        "label": "Dimensões (AxLxC)",
+        "value": "10x1x20 cm"
+      }
+    ],
+    "rating": 5,
+    "ratingCount": 0,
+    "isDigital": false,
+    "dimensions": {
+      "weight": 0.3,
+      "height": 10,
+      "width": 1,
+      "length": 20
+    }
   }
 ]
